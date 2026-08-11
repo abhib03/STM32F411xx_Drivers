@@ -1,0 +1,86 @@
+# =========================================================================
+# Build Outputs & Binary Artifacts
+# =========================================================================
+# Executables, object files, hex/bin dumps, map files, and dependency files
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.srec
+*.map
+*.d
+*.su
+*.cyclo
+
+# Generic Build Directories
+build/
+bin/
+out/
+Debug/
+Release/
+
+# =========================================================================
+# IDE & Toolchain Specific Files
+# =========================================================================
+
+# STM32CubeIDE / Eclipse
+.settings/
+.project
+.cproject
+.languageSettings.xml
+.target
+*.launch
+
+# VS Code / EIDE Extension
+.vscode/
+.eide/
+
+# Keil uVision
+*.uvopt
+*.uvoptx
+*.uvproj
+*.uvprojx
+*.uvguix.*
+*.bak
+*.dep
+*.lst
+*.htm
+*.lnp
+
+# IAR Embedded Workbench
+*.ewp
+*.eww
+*.ewd
+*.dep
+*.tmp
+
+# CLion / CMake
+.idea/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+
+# =========================================================================
+# OS & System Artifacts
+# =========================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.lsdb
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.fuse_hidden*
+
+# =========================================================================
+# Hardware Debugger & Profiler Temporary Logs
+# =========================================================================
+*.log
+*.dmp
+.openocd/
