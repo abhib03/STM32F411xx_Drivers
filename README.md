@@ -292,7 +292,6 @@ Future work may include:
 * Interrupt-driven communication
 * DMA support
 * More extensive error handling
-* Driver unit testing
 * Additional STM32 peripherals
 * RTOS integration
 * Sensor/device examples using the drivers
