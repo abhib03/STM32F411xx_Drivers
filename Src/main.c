@@ -25,7 +25,7 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-#define LED_PIN		GPIO_PIN_NUM_13
+#define LED_PIN		GPIO_PIN_NO_13
 
 int main(void)
 {
