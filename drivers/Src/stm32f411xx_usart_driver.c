@@ -366,7 +366,7 @@ void USART_PeriClockControl(USART_RegDef_t *pUSARTx, uint8_t EnorDi)
  *                    RESET if flag is not set
  *
  *********************************************************************/
-uint8_t USART_GetFlagStatus(USART_RegDef_t *pUSARTx, uint16_t StatusFlagName)
+uint8_t USART_GetFlagStatus(USART_RegDef_t *pUSARTx, uint32_t StatusFlagName)
 {
     if(pUSARTx->SR & StatusFlagName)
     {
@@ -611,7 +611,7 @@ uint8_t USART_ReceiveDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, ui
  *                    some USART flags require specific clear sequences.
  *
  *********************************************************************/
-void USART_ClearFlag(USART_RegDef_t *pUSARTx, uint16_t StatusFlagName)
+void USART_ClearFlag(USART_RegDef_t *pUSARTx, uint32_t StatusFlagName)
 {
     pUSARTx->SR &= ~(StatusFlagName);
 }
@@ -996,7 +996,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
         /*
          * Notify application about overrun.
          */
-        USART_ApplicationEventCallback(pUSARTHandle, USART_ERR_ORE );
+        USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_ERR_ORE );
 
         /*
          * Clear ORE.
@@ -1021,15 +1021,15 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
          */
         if(temp1 & (1 << USART_SR_FE))
         {
-            USART_ApplicationEventCallback(pUSARTHandle, USART_ERR_FE);
+            USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_ERR_FE);
         }
 
         /*
          * Noise Error.
          */
-        if(temp1 & (1 << USART_SR_NE))
+        if(temp1 & (1 << USART_SR_NF))
         {
-            USART_ApplicationEventCallback(pUSARTHandle, USART_ERR_NE);
+            USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_ERR_NE);
         }
 
         /*
@@ -1037,7 +1037,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
          */
         if(temp1 & (1 << USART_SR_ORE))
         {
-            USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_ORE);
+            USART_ApplicationEventCallback(pUSARTHandle,USART_EVENT_ERR_ORE);
         }
 
         /*
