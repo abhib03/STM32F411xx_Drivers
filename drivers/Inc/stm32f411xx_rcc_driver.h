@@ -2,7 +2,7 @@
  * stm32f411xx_rcc_driver.h
  *
  *  Created on: Aug 10, 2026
- *      Author: ASUS
+ *  Author: Abhishek_Bharadwaj
  */
 
 #ifndef INC_STM32F411XX_RCC_DRIVER_H_
