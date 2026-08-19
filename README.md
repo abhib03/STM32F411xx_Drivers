@@ -1,5 +1,3 @@
-Here is your **updated README with USART marked as completed and cleaned up consistently**:
-
 # STM32F411xx Bare-Metal Drivers
 
 A beginner-friendly collection of **bare-metal peripheral drivers for the STM32F411CE**.
