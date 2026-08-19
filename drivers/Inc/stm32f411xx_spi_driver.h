@@ -2,7 +2,7 @@
  * stm32f411xx_spi_driver.h
  *
  *  Created on: 27-Apr-2026
- *      Author: ASUS
+ *  Author: Abhishek_Bharadwaj
  */
 
 #ifndef INC_STM32F411XX_SPI_DRIVER_H_
