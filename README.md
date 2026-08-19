@@ -1,31 +1,36 @@
-# STM32F411 Bare-Metal Device Drivers
+Here is your **updated README with USART marked as completed and cleaned up consistently**:
 
-A reusable **bare-metal device driver library for the STM32F411** microcontroller, developed by programming peripheral registers directly from the STM32F411 reference manual and datasheet.
+# STM32F411xx Bare-Metal Drivers
 
-The project focuses on understanding how MCU peripherals work at the register level and implementing clean, reusable driver APIs without relying on STM32 HAL or LL libraries.
+A beginner-friendly collection of **bare-metal peripheral drivers for the STM32F411CE**.
 
-## Features
+This project is mainly for learning how STM32 peripherals work at the **register level**, without using STM32 HAL or LL drivers.
 
-* Register-level peripheral programming
-* Modular driver architecture
-* Reusable configuration structures and APIs
-* Peripheral clock management through RCC
-* GPIO configuration and control
-* I²C master communication
-* SPI communication
-* USART communication
-* Hardware-oriented driver design
-* Designed for STM32F411 Cortex-M4 microcontrollers
+I am building these drivers step by step while learning embedded C, STM32 peripherals, interrupts, and low-level firmware development.
 
-## Supported Drivers
+## Target MCU
 
-| Driver | Description                                | Status         |
-| ------ | ------------------------------------------ | -------------- |
-| RCC    | Peripheral clock and reset control         | ✅ Complete     |
-| GPIO   | Digital input/output and pin configuration | ✅ Complete     |
-| I²C    | I²C master communication                   | ✅ Complete     |
-| SPI    | SPI communication                          | ✅ Complete     |
-| USART  | Serial communication                       | 🔄 In Progress |
+- **MCU:** STM32F411CE
+- **Board:** STM32F411CE Blackpill
+- **Core:** ARM Cortex-M4
+- **IDE:** STM32CubeIDE
+- **Compiler:** ARM GCC
+- **Language:** C
+
+## Drivers
+
+The following drivers are currently implemented or under development:
+
+| Driver | Status        |
+| ------ | ------------- |
+| GPIO   | ✅ Implemented |
+| RCC    | ✅ Implemented |
+| SPI    | ✅ Implemented |
+| I2C    | ✅ Implemented |
+| USART  | ✅ Implemented |
+| EXTI   | 🔲 Planned    |
+| ADC    | 🔲 Planned    |
+| Timer  | 🔲 Planned    |
 
 ## Project Structure
 
@@ -37,281 +42,275 @@ STM32F411xx_Drivers/
 │   │   ├── stm32f411xx.h
 │   │   ├── stm32f411xx_gpio_driver.h
 │   │   ├── stm32f411xx_rcc_driver.h
-│   │   ├── stm32f411xx_i2c_driver.h
 │   │   ├── stm32f411xx_spi_driver.h
+│   │   ├── stm32f411xx_i2c_driver.h
 │   │   └── stm32f411xx_usart_driver.h
 │   │
 │   └── Src/
 │       ├── stm32f411xx_gpio_driver.c
 │       ├── stm32f411xx_rcc_driver.c
-│       ├── stm32f411xx_i2c_driver.c
 │       ├── stm32f411xx_spi_driver.c
+│       ├── stm32f411xx_i2c_driver.c
 │       └── stm32f411xx_usart_driver.c
 │
-├── Examples/(Will be added soon)
-│   ├── GPIO/
-│   ├── I2C/
-│   ├── SPI/
-│   └── USART/
+├── Startup/
+│   └── startup_stm32f411ceux.s
 │
-├── README.md
-└── LICENSE
+├── examples/
+│   └── ...
+│
+└── README.md
 ```
 
-## Hardware
+## Why I am building this
 
-The drivers are developed and tested using the **STM32F411CE** microcontroller, including the STM32F411CE Black Pill development board.
+The goal of this project is to understand what happens underneath high-level embedded libraries.
 
-### Main MCU
+Instead of directly using functions such as:
 
-* **MCU:** STM32F411CEU6
-* **Core:** ARM Cortex-M4
-* **Architecture:** 32-bit
-* **Maximum CPU frequency:** 100 MHz
-* **Flash:** 512 KB
-* **SRAM:** 128 KB
-* **Debug interface:** SWD
+```c
+HAL_GPIO_WritePin();
+HAL_UART_Transmit();
+HAL_SPI_Transmit();
+```
 
-## Development Environment
+I am learning to configure and control the STM32 peripherals by working directly with their registers.
 
-* STM32CubeIDE
-* ARM GNU Toolchain
-* STM32F411CE development board
-* ST-Link debugger/programmer
-* Logic analyzer / oscilloscope for peripheral validation
-
-## Driver Architecture
-
-The drivers are organized into separate header and source files.
+For example:
 
 ```text
 Application
-     │
-     ▼
+     ↓
 Driver API
-     │
-     ├── GPIO
-     ├── RCC
-     ├── I²C
-     ├── SPI
-     └── USART
-     │
-     ▼
-STM32F411 Peripheral Registers
-     │
-     ▼
-Hardware
+     ↓
+Peripheral registers
+     ↓
+STM32F411 hardware
 ```
 
-The application interacts with the peripheral through the driver API instead of directly manipulating peripheral registers.
+This project is also helping me practice:
 
-## GPIO Driver
+- Embedded C
+- Memory-mapped registers
+- Bit manipulation
+- STM32 reference manuals
+- Peripheral configuration
+- Interrupts
+- NVIC
+- Clock configuration
+- Driver/API design
+- Bare-metal firmware development
 
-The GPIO driver provides configuration and control of STM32F411 GPIO peripherals.
+## Current Drivers
 
-Typical functionality includes:
+### GPIO
 
-* Input/output configuration
-* Pull-up/pull-down configuration
-* Output speed configuration
-* Push-pull/open-drain configuration
-* Alternate-function configuration
-* GPIO output control
-* GPIO input reading
-* GPIO toggle
-* GPIO interrupt configuration support
+The GPIO driver supports basic GPIO configuration and operations such as:
 
-Example:
+- Input/output configuration
+- Output type
+- Output speed
+- Pull-up/pull-down
+- Reading input pins
+- Writing output pins
+- Toggling output pins
 
-```c
-GPIO_Handle_t GpioLed;
+### RCC
 
-GpioLed.pGPIOx = GPIOA;
-GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_5;
-GpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
-GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
-GpioLed.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
-GpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+The RCC driver is used for peripheral clock control and clock-related calculations.
 
-GPIO_Init(&GpioLed);
-GPIO_ToggleOutputPin(GPIOA, GPIO_PIN_NO_5);
+It includes support for:
+
+- AHB1 peripheral clocks
+- APB1 peripheral clocks
+- APB2 peripheral clocks
+- PCLK1 calculation
+- PCLK2 calculation
+
+### SPI
+
+The SPI driver is being developed for the STM32F411 SPI peripherals.
+
+Current areas include:
+
+- Master mode
+- Slave mode
+- Full duplex
+- Half duplex
+- Clock polarity
+- Clock phase
+- Baud-rate prescaler
+- 8-bit and 16-bit data frames
+- Software NSS
+- Polling-based communication
+- Interrupt-based communication
+
+### I2C
+
+The I2C driver supports the basic STM32 I2C master communication flow.
+
+Current areas include:
+
+- I2C initialization
+- Clock configuration
+- ACK configuration
+- Start/Stop conditions
+- Master transmit
+- Master receive
+- Polling-based communication
+- Interrupt-based communication
+
+### USART
+
+The USART driver is now **fully implemented**.
+
+It supports:
+
+- USART1
+- USART2
+- USART6
+- Baud-rate configuration
+- Word length configuration
+- Stop bits configuration
+- Parity configuration
+- Hardware flow control
+- TX/RX communication
+- Polling mode
+- Interrupt mode
+- Application callbacks
+- USART error handling
+
+## Examples
+
+I plan to add simple examples for each driver as I test them on the STM32F411CE Blackpill.
+
+Planned examples include:
+
+```text
+GPIO
+├── LED blink
+├── Button input
+└── EXTI interrupt
+
+USART
+├── Polling TX/RX
+└── Interrupt echo
+
+SPI
+└── SPI loopback
+
+I2C
+├── I2C scanner
+└── Sensor communication
+
+ADC
+└── Analog sensor reading
+
+Timer
+└── Periodic interrupt / delay generation
 ```
 
-## RCC Driver
+The examples are intended to be simple and easy to understand rather than being complete applications.
 
-The RCC driver manages peripheral clock configuration and reset operations.
+## Hardware
 
-Responsibilities include:
+The main development board used for this project is:
 
-* GPIO peripheral clock control
-* I²C peripheral clock control
-* SPI peripheral clock control
-* USART peripheral clock control
-* Peripheral reset control
-* Clock-related configuration required by peripherals
+**STM32F411CE Blackpill**
 
-The RCC driver provides the clock infrastructure required by the other peripheral drivers.
+The drivers are written specifically with the STM32F411xx peripheral set in mind.
 
-## I²C Driver
+## How to Use
 
-The I²C driver implements register-level I²C master communication.
+Clone the repository and open the project in STM32CubeIDE.
 
-Supported functionality includes:
-
-* I²C peripheral initialization
-* Master transmit
-* Master receive
-* START condition generation
-* STOP condition generation
-* ACK/NACK handling
-* Address transmission
-* Repeated START handling
-* Status flag handling
-* Bus/error condition handling
-
-The driver was developed by studying the STM32F411 I²C peripheral registers and communication sequence described in the reference manual.
-
-## SPI Driver
-
-The SPI driver provides register-level SPI communication.
-
-Supported functionality includes:
-
-* SPI initialization
-* Master configuration
-* Slave configuration
-* Full-duplex communication
-* SPI data transmission
-* SPI data reception
-* Clock polarity configuration
-* Clock phase configuration
-* Baud-rate configuration
-* Data frame configuration
-* Software/hardware slave-management configuration
-* SPI status handling
-
-The driver is designed to provide a reusable interface for communicating with SPI peripherals such as sensors, displays, memory devices, and other external ICs.
-
-## USART Driver
-
-The USART driver provides serial communication through the STM32F411 USART peripherals.
-
-Planned/supported functionality includes:
-
-* USART initialization
-* Baud-rate configuration
-* Word-length configuration
-* Stop-bit configuration
-* Parity configuration
-* Transmit
-* Receive
-* USART status handling
-* TX/RX configuration
-
-USART can also be used as a debugging interface for applications using the other peripheral drivers.
-
-## Design Approach
-
-The drivers follow a modular design based on configuration structures and peripheral handles.
-
-Example:
-
-```c
-GPIO_Handle_t GPIO_Handle;
-I2C_Handle_t I2C_Handle;
-SPI_Handle_t SPI_Handle;
-USART_Handle_t USART_Handle;
+```bash
+git clone https://github.com/abhib03/STM32F411xx_Drivers.git
 ```
 
-This approach separates:
+Build the project and flash it to an STM32F411CE board.
 
-1. Peripheral configuration
-2. Driver initialization
-3. Hardware register access
-4. Application-level functionality
+The driver source and header files can also be included in other STM32F411 bare-metal projects.
 
-The goal is to make the drivers reusable across multiple STM32F411 projects.
+## Learning Approach
 
-## Validation
+I am developing this project incrementally.
 
-The drivers are validated using actual STM32F411 hardware rather than only software compilation.
+The general workflow is:
 
-Validation methods include:
+```text
+Read Reference Manual
+        ↓
+Understand peripheral registers
+        ↓
+Create register definitions
+        ↓
+Create configuration structures
+        ↓
+Implement driver functions
+        ↓
+Build
+        ↓
+Test on hardware
+        ↓
+Fix bugs / improve driver
+```
 
-* LED/GPIO functional testing
-* Serial communication with a PC
-* I²C communication with external sensors
-* SPI communication with external peripherals
-* Register/status verification
-* Logic analyzer measurements
-* Oscilloscope measurements where required
+This repository is therefore a **learning project**, and the implementation may change as I improve my understanding of STM32 firmware development.
 
-For communication peripherals, electrical signals and protocol transactions are inspected to verify correct hardware behavior.
+## Future Goals
 
-## Learning Objectives
+The next goal is to expand the driver library while keeping the implementation simple and understandable.
 
-This project was developed to gain practical understanding of:
+### Planned Drivers
 
-* STM32 memory-mapped peripherals
-* MCU register architecture
-* Peripheral initialization sequences
-* ARM Cortex-M4 microcontrollers
-* Clock and reset architecture
-* Serial communication protocols
-* Embedded C
-* Hardware/software interaction
-* Driver abstraction
-* Datasheet and reference-manual interpretation
+- [ ] EXTI driver
+- [ ] ADC driver
+- [ ] Timer driver
+- [ ] SysTick driver
+- [ ] Watchdog driver
+- [ ] DMA driver
 
-## Why Bare-Metal?
+### Planned Improvements
 
-Unlike STM32 HAL-based applications, this project directly configures the STM32F411 peripheral registers.
+- [ ] Add more hardware examples
+- [ ] Add USART interrupt example
+- [ ] Add SPI loopback example
+- [ ] Add I2C scanner
+- [ ] Test drivers with real sensors/peripherals
+- [ ] Add better error handling
+- [ ] Add timeout handling
+- [ ] Improve documentation
+- [ ] Add more comments and usage examples
 
-This provides a deeper understanding of:
+### Long-Term Goal
 
-* What happens inside peripheral initialization
-* How registers control MCU hardware
-* How communication peripherals operate
-* How status flags and control bits are used
-* How higher-level driver APIs are built
+The long-term goal is to build a small **STM32 bare-metal driver library** that I understand from the register level up, and eventually use these drivers in larger firmware projects.
 
-The project is intended primarily as a **learning and firmware-engineering project**, while maintaining a reusable driver structure suitable for future embedded applications.
+## Disclaimer
 
-## Future Improvements
+This is a personal learning project.
 
-The core driver set focuses on:
-
-* GPIO
-* RCC
-* I²C
-* SPI
-* USART
-
-Future work may include:
-
-* Interrupt-driven communication
-* DMA support
-* More extensive error handling
-* Additional STM32 peripherals
-* RTOS integration
-* Sensor/device examples using the drivers
+The drivers are developed for educational purposes and may still contain bugs or limitations. They are being improved and tested as I continue learning STM32 bare-metal firmware development.
 
 ## References
 
-* STM32F411 Reference Manual
-* STM32F411 Datasheet
-* ARM Cortex-M4 Technical Reference Manual
-* ARM Cortex-M4 Devices Generic User Guide
+- STM32F411 Reference Manual
+- STM32F411 Datasheet
+- STM32F4 Programming Manual
+- ARM Cortex-M4 documentation
+- STM32F411CE Blackpill hardware documentation
 
 ## Author
 
 **Abhishek Bharadwaj**
-
-Embedded Software Intern - Aktivolt Celtek
+Embedded Software Intern
 Electronics & Instrumentation Engineering Graduate
 
-GitHub: [@abhib03](https://github.com/abhib03)
+Interested in:
 
----
-
-> **Note:** This project is intended for educational purposes and to demonstrate low-level embedded firmware and device-driver development on the STM32F411.
+- Embedded Systems
+- Bare-Metal Firmware
+- Embedded C
+- RTOS
+- Low-Level Driver Development
