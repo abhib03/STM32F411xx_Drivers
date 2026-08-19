@@ -58,6 +58,6 @@ void EXTI0_IRQHandler(void)
 
 	delay();  // Debounce delay
 
-	GPIO_IRQHandling(GPIO_PIN_NO_0);  // Clear the pending bit
-	GPIO_ToggleOutputPin(GPIOC, GPIO_PIN_NO_13);  // Toggle LED
+	GPIO_IRQHandling(GPIO_PIN_NUM_0);  // Clear the pending bit
+	GPIO_ToggleOutputPin(GPIOC, GPIO_PIN_NUM_13);  // Toggle LED
 }
