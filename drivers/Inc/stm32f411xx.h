@@ -50,7 +50,8 @@
 #define GPIOD_BASEADDR				(AHB1PERIPH_BASEADDR + 0x0C00U)  //Base address of GPIOD - 0x40020C00U
 #define GPIOE_BASEADDR				(AHB1PERIPH_BASEADDR + 0x1000U)  //Base address of GPIOE - 0x40021000U
 #define GPIOH_BASEADDR				(AHB1PERIPH_BASEADDR + 0x1C00U)  //Base address of GPIOH - 0x40021C00U
-
+#define DMA1_BASEADDR       		(AHB1PERIPH_BASEADDR + 0x6000U)  //Base address of DMA1` - 0x40026000U
+#define DMA2_BASEADDR       		(AHB1PERIPH_BASEADDR + 0x6400U)  //Base address of DMA2	 - 0x40026400U
 /*
  * Base addresses of peripherals hanging on AHB2 bus
  * NOTE:
@@ -83,6 +84,27 @@
 #define EXTI_BASEADDR 				(APB2PERIPH_BASEADDR + 0x3C00U)  //Base address of EXTI   - 0x40013C00U
 #define SPI5_BASEADDR				(APB2PERIPH_BASEADDR + 0x5000U)  //Base address of SPI5   -	0x40015000U
 
+/*
+ * Base addresses of DMA streams
+ * Each stream is offset by 0x18 bytes from the previous stream.
+ */
+#define DMA1_STREAM0_BASEADDR     	(DMA1_BASEADDR + 0x0010U)		//Base address of DMA1_STREAM0 - 0x40026010U
+#define DMA1_STREAM1_BASEADDR     	(DMA1_BASEADDR + 0x0028U)		//Base address of DMA1_STREAM1 - 0x40026028U
+#define DMA1_STREAM2_BASEADDR     	(DMA1_BASEADDR + 0x0040U)		//Base address of DMA1_STREAM2 - 0x40026040U
+#define DMA1_STREAM3_BASEADDR     	(DMA1_BASEADDR + 0x0058U)		//Base address of DMA1_STREAM3 - 0x40026058U
+#define DMA1_STREAM4_BASEADDR     	(DMA1_BASEADDR + 0x0070U)		//Base address of DMA1_STREAM4 - 0x40026070U
+#define DMA1_STREAM5_BASEADDR     	(DMA1_BASEADDR + 0x0088U)		//Base address of DMA1_STREAM5 - 0x40026088U
+#define DMA1_STREAM6_BASEADDR     	(DMA1_BASEADDR + 0x00A0U)		//Base address of DMA1_STREAM6 - 0x400260A0U
+#define DMA1_STREAM7_BASEADDR     	(DMA1_BASEADDR + 0x00B8U)		//Base address of DMA1_STREAM7 - 0x400260B8U
+
+#define DMA2_STREAM0_BASEADDR     	(DMA2_BASEADDR + 0x0010U)		//Base address of DMA2_STREAM0 - 0x40026410U
+#define DMA2_STREAM1_BASEADDR    	(DMA2_BASEADDR + 0x0028U)		//Base address of DMA2_STREAM1 - 0x40026428U
+#define DMA2_STREAM2_BASEADDR     	(DMA2_BASEADDR + 0x0040U)		//Base address of DMA2_STREAM2 - 0x40026440U
+#define DMA2_STREAM3_BASEADDR     	(DMA2_BASEADDR + 0x0058U)		//Base address of DMA2_STREAM3 - 0x40026458U
+#define DMA2_STREAM4_BASEADDR     	(DMA2_BASEADDR + 0x0070U)		//Base address of DMA2_STREAM4 - 0x40026470U
+#define DMA2_STREAM5_BASEADDR    	(DMA2_BASEADDR + 0x0088U)		//Base address of DMA2_STREAM5 - 0x40026488U
+#define DMA2_STREAM6_BASEADDR     	(DMA2_BASEADDR + 0x00A0U)		//Base address of DMA2_STREAM6 - 0x400264A0U
+#define DMA2_STREAM7_BASEADDR     	(DMA2_BASEADDR + 0x00B8U)		//Base address of DMA2_STREAM7 - 0x400264B8U
 
 /*
  *  Peripheral register definition structure for GPIO
@@ -222,10 +244,35 @@ typedef struct
 
 
 /*
+ *	register definition for DMA controller
+ */
+typedef struct{
+	__vo uint32_t LISR;			// Low Interrupt Status Reg				Address offset : 0x00
+	__vo uint32_t HISR;			// High Interrupt Status Reg			Address offset : 0x04
+	__vo uint32_t LIFCR;		// Low Interrupt Flag Clear Reg			Address offset : 0x08
+	__vo uint32_t HIFCR;		// High Interrupt Flag Clear Reg		Address offset : 0x0C
+}DMA_RegDef_t;
+
+/*
+ * register definition for stream block
+ * Each stream has its own register block
+ * This register is used to configure the concerned stream.
+ */
+typedef struct{
+	__vo uint32_t CR;			// Configuration register				Address offset : 0x10 + 0x18 × stream number
+	__vo uint32_t NDTR;			// Number of data register				Address offset : 0x14 + 0x18 × stream number
+	__vo uint32_t PAR;			// Peripheral address register			Address offset : 0x18 + 0x18 × stream number
+	__vo uint32_t M0AR;			// Memory 0 address register			Address offset : 0x1C + 0x18 × stream number
+	__vo uint32_t M1AR;			// Memory 1 address register			Address offset : 0x20 + 0x18 × stream number
+	__vo uint32_t FCR;			// FIFO control register 				Address offset : 0x24 + 0x18 × stream number
+}DMA_Stream_RegDef_t;
+
+/*
  * GPIO peripheral definitions  (base addresses type-casted to GPIOx_RegDef_t)
  * USART peripheral definitions (base addresses type-casted to USART_RegDef_t)
  * SPI peripheral definitions (base addresses type-casted to SPI_RegDef_t)
- * I2C peripheral definitions (base addresses type-casted to I2C_RegDef_t
+ * I2C peripheral definitions (base addresses type-casted to I2C_RegDef_t)
+ * DMA controller definitions (base addresses type-casted to DMA_RegDef_t
  */
 #define GPIOA   		((GPIO_RegDef_t*)GPIOA_BASEADDR)
 #define GPIOB   		((GPIO_RegDef_t*)GPIOB_BASEADDR)
@@ -251,6 +298,9 @@ typedef struct
 #define I2C1			((I2C_RegDef_t*)I2C1_BASEADDR)
 #define I2C2			((I2C_RegDef_t*)I2C2_BASEADDR)
 #define I2C3			((I2C_RegDef_t*)I2C3_BASEADDR)
+
+#define DMA1            ((DMA_RegDef_t *)DMA1_BASEADDR)
+#define DMA2            ((DMA_RegDef_t *)DMA2_BASEADDR)
 
 /*
  * Clock Enable Macros for GPIOx peripherals
