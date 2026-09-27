@@ -710,7 +710,7 @@ typedef struct{
  * Bit position definition for I2C_OAR2 (I2C_Own address register 2)
  */
 #define I2C_OAR2_ENDUAL		0	//Dual addressing mode enable
-#define I2C_OSR2_ADD2		1	//Interface address
+#define I2C_OAR2_ADD2		1	//Interface address
 
 
 /*
